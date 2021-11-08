@@ -1,0 +1,9 @@
+kopf[dev]
+kubernetes
+pydantic
+requests
+hvac
+pyyaml
+twine
+wheel
+pylint

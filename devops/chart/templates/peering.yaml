@@ -1,0 +1,7 @@
+apiVersion: kopf.dev/v1
+kind: ClusterKopfPeering
+metadata:
+  name: axoniq-operator
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+

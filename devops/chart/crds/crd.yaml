@@ -1,0 +1,209 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: apps.axoniq.bleuelab.ca
+spec:
+  scope: Namespaced
+  group: axoniq.bleuelab.ca
+  names:
+    kind: App
+    plural: apps
+    singular: app
+    shortNames: []
+    categories:
+    - all
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              description:
+                type: string
+              contexts:
+                items:
+                  type: object
+                  properties:
+                    context:
+                      type: string
+                    roles:
+                      items:
+                        type: string
+                        enum:
+                        - ADMIN
+                        - CONTEXT_ADMIN
+                        - DISPATCH_COMMANDS
+                        - DISPATCH_QUERY
+                        - MONITOR
+                        - PUBLISH_EVENTS
+                        - READ
+                        - READ_EVENTS
+                        - SUBSCRIBE_COMMAND_HANDLER
+                        - SUBSCRIBE_QUERY_HANDLER
+                        - USE_CONTEXT
+                        - WRITE
+                      type: array
+                  required:
+                  - context
+                  - roles
+                type: array
+              instance:
+                type: string
+            required:
+            - instance
+            - description
+            - contexts
+          status:
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+    additionalPrinterColumns:
+    - name: Success
+      type: boolean
+      description: Last operation sucess
+      jsonPath: '.status.lastOperationSuccess'
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: contexts.axoniq.bleuelab.ca
+spec:
+  scope: Namespaced
+  group: axoniq.bleuelab.ca
+  names:
+    kind: Context
+    plural: contexts
+    singular: context
+    shortNames: []
+    categories:
+    - all
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              contexts:
+                items:
+                  type: object
+                  properties:
+                    context:
+                      type: string
+                    plugins:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                    replicationGroup:
+                      default: default
+                      type: string
+                  required:
+                  - context
+                type: array
+              instance:
+                type: string
+            required:
+            - instance
+            - contexts
+          status:
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+    additionalPrinterColumns:
+    - name: Success
+      type: boolean
+      description: Last operation sucess
+      jsonPath: '.status.lastOperationSuccess'
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: instances.axoniq.bleuelab.ca
+spec:
+  scope: Cluster
+  group: axoniq.bleuelab.ca
+  names:
+    kind: Instance
+    plural: instances
+    singular: instance
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              grpc:
+                type: string
+              http:
+                type: string
+              token:
+                type: object
+                properties:
+                  hashicorpVault:
+                    type: object
+                    properties:
+                      addr:
+                        type: string
+                      auth:
+                        type: string
+                      field:
+                        type: string
+                      mount:
+                        type: string
+                      path:
+                        type: string
+                      role:
+                        type: string
+                    required:
+                    - addr
+                    - role
+                    - auth
+                    - path
+                    - mount
+                    - field
+                required:
+                - hashicorpVault
+            required:
+            - http
+            - grpc
+            - token
+          status:
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: plugins.axoniq.bleuelab.ca
+spec:
+  scope: Cluster
+  group: axoniq.bleuelab.ca
+  names:
+    kind: Plugin
+    plural: plugins
+    singular: plugin
+  versions:
+  - name: v1
+    served: true
+    storage: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
+          status:
+            type: object
+            x-kubernetes-preserve-unknown-fields: true
