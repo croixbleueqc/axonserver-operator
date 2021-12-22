@@ -74,6 +74,12 @@ class AxonServer():
                 "replicationGroup": context.replicationGroup
             }
         )
+
+        # since 4.5.11, post with an existing context will result in:
+        # code: 400 - message: [AXONIQ-1304] Context already exists
+        if response.status_code == 400 and "[AXONIQ-1304]" in response.text:
+            return
+
         self._check(response, [200])
 
     def update_context_plugin(self, payload: dict):
