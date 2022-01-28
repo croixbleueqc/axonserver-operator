@@ -84,25 +84,25 @@ Axon Server EE support plugins to apply on contexts.
 
 You can define which plugins are supported by your instances. It is possible to support the same plugin with multiple configurations.
 
-We are using `io.axoniq.axon-server-plugin-data-protection` with `azure vault backend` as an example:
+We are using `io.axoniq.axon-server-plugin-data-protection-azure` as an example:
 
 ```yaml
 apiVersion: axoniq.bleuelab.ca/v1
 kind: Plugin
 metadata:
-  name: data-protection
+  name: data-protection-azure
 spec:
   template:
     payload: |
       context: '{context}'
-      name: io.axoniq.axon-server-plugin-data-protection
+      name: io.axoniq.axon-server-plugin-data-protection-azure
       version: '{version}'
       properties:
         'MetaModel configuration':
           metamodel: '{model}'
-        'Vault storage configuration':
-          vaultType: azure
-          cacheEnabled: true
+        'Access Control Configuration':
+          allowedReadPrincipals: '{allowedReadPrincipals}'
+        'Azure Vault Configuration':
           prefix: '{context}'
           azureVaultUrl: 'https://{env}-myvault.vault.azure.net'
           azureServicePrincipalClientId:
@@ -125,6 +125,7 @@ spec:
     variables:
     - context # reserved
     - version # reserved
+    - allowedReadPrincipals: ''
     - model
     - env
 
