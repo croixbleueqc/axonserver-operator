@@ -227,5 +227,10 @@ kubectl -n myns get secret test -o json | jq -M -r .data.url | base64 -d
 
 Your vault needs to be integrated with kubernetes as the service account credential of the pod will be used to connect on it.
 
+
+## Unit tests
+pip install coverage
+coverage run -m unittest discover -s tests -p "*_test.py"
+
 ## TODO
 

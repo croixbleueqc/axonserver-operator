@@ -35,7 +35,7 @@ class InternalPlugin(): # pylint: disable=too-few-public-methods
     def __init__(self, kplugin: PluginKind):
         self._kplugin = kplugin
 
-    def decode(input_str: str) -> str:
+    def decode(self, input_str: str) -> str:
         """
         Decode base64 and unzip
         """
@@ -45,20 +45,23 @@ class InternalPlugin(): # pylint: disable=too-few-public-methods
         message = uncmpstr.decode('utf-8')
         return message
 
-    def is_encoded(input_str: str) -> bool:
+    def is_encoded(self, input_str: str) -> bool:
         """
         Decode input and re-encode it, if result match input, it was encoded.
         """
-        input_base64_bytes = input_str.encode('utf-8')
-        input_decoded_bytes=base64.b64decode(input_base64_bytes)
+        try:
+            input_base64_bytes = input_str.encode('utf-8')
+            input_decoded_bytes=base64.b64decode(input_base64_bytes)
 
-        input_encoded_bytes=base64.b64encode(input_decoded_bytes)
-        input_decoded_msg = input_encoded_bytes.decode('utf-8')
+            input_encoded_bytes=base64.b64encode(input_decoded_bytes)
+            input_decoded_msg = input_encoded_bytes.decode('utf-8')
 
-        if input_decoded_msg == input_str:
-            return True
+            if input_decoded_msg == input_str:
+                return True
 
-        return False
+            return False
+        except:
+            return False
 
     def get_payload(self, context: str, plugin: dict) -> dict:
         """
