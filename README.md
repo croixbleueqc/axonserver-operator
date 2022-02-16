@@ -132,6 +132,31 @@ spec:
 
 `variables` are used to know what should be replaced in the template payload. This is mainly what you will define in a context object under a plugin.
 
+`variables` can be a list of string or a list of object with attributes : { name: str, encoding: str}
+use encoding='base64:zlib' when variable value is zip and base64 encoded.
+
+```yaml
+apiVersion: axoniq.bleuelab.ca/v1
+kind: Plugin
+metadata:
+  name: data-protection
+spec:
+  template:
+    payload: |
+      {... see example above}
+    variables:
+    - name: context # reserved
+      encoding: none
+    - name: version # reserved
+      encoding: none
+    - name: model
+      encoding: base64:zlib
+    - name: env
+      encoding: none
+
+```
+
+
 ```bash
 kubectl apply -f plugins.yaml
 
@@ -157,7 +182,7 @@ spec:
     plugins:
       data-protection: # should match a metadata.name plugin object
         version: 1.0.1 # version field is mandatory
-        model: '{"config": []}' # everything else is free and depend on the plugin definition (and spec.template.variables)
+        model: '{"config": []}' # everything else is free and depend on the plugin definition (and spec.template.variables), value can be zip and base64 encoded when specified correctly in template variables
         env: dev
   - context: myctx2-dev
 ```
