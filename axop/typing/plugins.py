@@ -26,12 +26,12 @@ from .metadata import Metadata
 class ConfigVariable(BaseModel): # pylint: disable=too-few-public-methods
     """Config variable model"""
     name: str
-    encoding: str
+    encoding: List[str]
 
 class TemplateSpec(BaseModel): # pylint: disable=too-few-public-methods
     """Template Spec model"""
     payload: str
-    variables: Union[List[str],List[ConfigVariable]]
+    variables: List[Union[str,ConfigVariable]]
 
 class PluginSpec(BaseModel): # pylint: disable=too-few-public-methods
     """Plugin Spec model"""

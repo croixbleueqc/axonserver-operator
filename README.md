@@ -132,8 +132,8 @@ spec:
 
 `variables` are used to know what should be replaced in the template payload. This is mainly what you will define in a context object under a plugin.
 
-`variables` can be a list of string or a list of object with attributes : { name: str, encoding: str}
-use encoding='base64:zlib' when variable value is zip and base64 encoded.
+`variables` is a list of string or object with attributes : { name: str, encoding: List[str]}
+and for now, only encoding 'base64:zlib' is supported.
 
 ```yaml
 apiVersion: axoniq.bleuelab.ca/v1
@@ -145,15 +145,13 @@ spec:
     payload: |
       {... see example above}
     variables:
-    - name: context # reserved
-      encoding: none
-    - name: version # reserved
-      encoding: none
+    - context # reserved
+    - version # reserved
     - name: model
-      encoding: base64:zlib
-    - name: env
-      encoding: none
-
+      encoding:
+      - 'base64:zlib'
+    - env
+    
 ```
 
 

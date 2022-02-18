@@ -57,21 +57,17 @@ class InternalPlugin(): # pylint: disable=too-few-public-methods
 
         for i in required:
             if isinstance(i, ConfigVariable):
-                if i.name=="context":
-                    value=context
+                if "base64:zlib" in i.encoding:
+                    values[i.name] = self.decode(plugin[i.name])
                 else:
-                    value=plugin[i.name]
-
-                if i.encoding == "base64:zlib":
-                    values[i.name] = self.decode(value)
-                else:
-                    values[i.name] = value
+                    values[i.name] = plugin[i.name]
             else:
                 if i == 'context':
                     values["context"]=context
                 else:
                     values[i] = plugin[i]
 
+        # print(values)
         payload = yaml.safe_load(
             self._kplugin.spec.template.payload.format(**values)
         )
