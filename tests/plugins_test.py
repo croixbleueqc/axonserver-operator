@@ -238,12 +238,13 @@ class TestPlugins(unittest.TestCase):
             'version': '1.0.4'
         }
         
+        #Test
         plugin_instance = plugin_from_index(plugins_idx_list, self._plugin_name)
+        payload = plugin_instance.get_payload(self._context_name, plugin_model_not_encoded)
         
-        #Test and Assert value error because decoding throw exception
-        with self.assertRaises(ValueError):
-            plugin_instance.get_payload(self._context_name, plugin_model_not_encoded)
-
+        self.assertEqual(payload['context'], self._context_name)
+        self.assertEqual(payload['version'], plugin_model_not_encoded['version'])
+        self.assertEqual(payload['metamodel'], plugin_model_not_encoded['model'])
 
 
 if __name__ == '__main__':
