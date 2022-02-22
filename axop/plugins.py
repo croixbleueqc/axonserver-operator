@@ -46,7 +46,8 @@ class InternalPlugin(): # pylint: disable=too-few-public-methods
             message = uncmpstr.decode('utf-8')
             return message
         except:
-            raise ValueError
+            print("Error decoding encoding, using raw value")
+            return input_str
 
     def get_payload(self, context: str, plugin: dict) -> dict:
         """
