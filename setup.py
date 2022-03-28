@@ -26,7 +26,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='axop',
-    version='0.6.2',
+    version='0.6.3',
     python_requires='>=3.9',
     packages=find_packages(),
     install_requires=[
