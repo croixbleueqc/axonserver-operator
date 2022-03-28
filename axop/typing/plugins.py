@@ -19,14 +19,19 @@ Plugins Kind
 # You should have received a copy of the GNU Lesser General Public License
 # along with axop.  If not, see <https://www.gnu.org/licenses/>.
 
-from typing import Literal, List
+from typing import Literal, List, Union
 from pydantic import BaseModel # pylint: disable=no-name-in-module
 from .metadata import Metadata
+
+class ConfigVariable(BaseModel): # pylint: disable=too-few-public-methods
+    """Config variable model"""
+    name: str
+    encoding: List[str]
 
 class TemplateSpec(BaseModel): # pylint: disable=too-few-public-methods
     """Template Spec model"""
     payload: str
-    variables: List[str]
+    variables: List[Union[str,ConfigVariable]]
 
 class PluginSpec(BaseModel): # pylint: disable=too-few-public-methods
     """Plugin Spec model"""
