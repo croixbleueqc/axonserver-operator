@@ -133,29 +133,6 @@ spec:
 
 `variables` are used to know what should be replaced in the template payload. This is mainly what you will define in a context object under a plugin.
 
-`variables` is a list of string or object with attributes : { name: str, encoding: List[str]}
-and for now, only encoding 'base64:zlib' is supported.
-
-```yaml
-apiVersion: axoniq.bleuelab.ca/v1
-kind: Plugin
-metadata:
-  name: data-protection
-spec:
-  template:
-    payload: |
-      {... see example above}
-    variables:
-    - context # reserved
-    - version # reserved
-    - name: model
-      encoding:
-      - 'base64:zlib'
-    - env
-    
-```
-
-
 ```bash
 kubectl apply -f plugins.yaml
 
@@ -181,7 +158,7 @@ spec:
     plugins:
       data-protection: # should match a metadata.name plugin object
         version: 1.0.1 # version field is mandatory
-        model: '{"config": []}' # everything else is free and depend on the plugin definition (and spec.template.variables), value can be zip and base64 encoded when specified correctly in template variables
+        model: '{"config": []}' # everything else is free and depend on the plugin definition (and spec.template.variables)
         env: dev
   - context: myctx2-dev
 ```
@@ -250,11 +227,6 @@ kubectl -n myns get secret test -o json | jq -M -r .data.url | base64 -d
 `axop` **only** support HashiCorp Vault backend to get some secrets. It is using the `hashicorpVault` key.
 
 Your vault needs to be integrated with kubernetes as the service account credential of the pod will be used to connect on it.
-
-
-## Unit tests
-pip install coverage
-coverage run -m unittest discover -s tests -p "*_test.py"
 
 ## TODO
 

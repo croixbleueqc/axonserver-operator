@@ -22,10 +22,9 @@ Manages Plugin kind
 import kopf
 import yaml
 from . import settings
-from .typing.plugins import PluginKind,ConfigVariable
+from .typing.plugins import PluginKind
 from .secrets.vault import unravel_mysteries
-import zlib
-import base64
+
 PLUGINS='plugins'
 
 class InternalPlugin(): # pylint: disable=too-few-public-methods
@@ -35,20 +34,6 @@ class InternalPlugin(): # pylint: disable=too-few-public-methods
     def __init__(self, kplugin: PluginKind):
         self._kplugin = kplugin
 
-    def decode(self, input_str: str) -> str:
-        """
-        Decode base64 and unzip
-        """
-        try:
-            base64_bytes = input_str.encode('utf-8')
-            message_bytes = base64.b64decode(base64_bytes)
-            uncmpstr = zlib.decompress(message_bytes)
-            message = uncmpstr.decode('utf-8')
-            return message
-        except:
-            print("Error decoding encoding, using raw value")
-            return input_str
-
     def get_payload(self, context: str, plugin: dict) -> dict:
         """
         Replace required fields in the payload
@@ -57,18 +42,11 @@ class InternalPlugin(): # pylint: disable=too-few-public-methods
         values = {}
 
         for i in required:
-            if isinstance(i, ConfigVariable):
-                if "base64:zlib" in i.encoding:
-                    values[i.name] = self.decode(plugin[i.name])
-                else:
-                    values[i.name] = plugin[i.name]
-            else:
-                if i == 'context':
-                    values["context"]=context
-                else:
-                    values[i] = plugin[i]
+            if i == "context":
+                values["context"] = context
+                continue
+            values[i] = plugin[i]
 
-        # print(values)
         payload = yaml.safe_load(
             self._kplugin.spec.template.payload.format(**values)
         )
