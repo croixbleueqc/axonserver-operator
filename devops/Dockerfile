@@ -1,6 +1,8 @@
-FROM python:3.9-slim AS builder
+FROM python:3.10-slim AS builder
 
 WORKDIR /src
+
+RUN apt-get update 2>&1 > /dev/null && apt-get install -y gcc
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
@@ -10,7 +12,7 @@ COPY . .
 RUN python setup.py sdist bdist_wheel
 
 # Production
-FROM python:3.9-slim
+FROM python:3.10-slim
 
 WORKDIR /src
 
