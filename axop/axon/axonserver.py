@@ -80,7 +80,7 @@ class AxonServer():
         if response.status_code == 400 and "[AXONIQ-1304]" in response.text:
             return
 
-        self._check(response, [200])
+        self._check(response, [200, 202])
 
     def update_context_plugin(self, payload: dict):
         """Update plugin configuration"""
