@@ -7,3 +7,4 @@ pyyaml
 twine
 wheel
 pylint
+aiohttp>=3.12.14 # not directly required, pinned by Snyk to avoid a vulnerability
